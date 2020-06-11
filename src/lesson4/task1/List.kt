@@ -245,4 +245,83 @@ fun roman(n: Int): String = TODO()
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String =
+    if (n / 1000 > 0) {
+        if ((n / 10000) % 10 == 1){
+            (russianHundred(n / 1000, true) + thousands[0] + russianHundred(n % 1000)).dropLast(1)
+        } else {
+            (russianHundred(n / 1000, true) + thousands[(n / 1000) % 10] + russianHundred(n % 1000)).dropLast(1)
+        }
+    } else {
+        russianHundred(n % 1000).dropLast(1)
+    }
+
+
+val hundreds =
+    arrayOf(
+        "",
+        "сто ",
+        "двести ",
+        "триста ",
+        "четыреста ",
+        "пятьсот ",
+        "шестьсот ",
+        "семьсот ",
+        "восемьсот ",
+        "девятьсот "
+    )
+val tens = arrayOf(
+    "",
+    "десять ",
+    "двадцать ",
+    "тридцать ",
+    "сорок ",
+    "пятьдесят ",
+    "шестьдесят ",
+    "семьдесят ",
+    "восемьдесят ",
+    "девяносто "
+)
+val ones = arrayOf("", "один ", "два ", "три ", "четыре ", "пять ", "шесть ", "семь ", "восемь ", "девять ")
+
+val firstTen = arrayOf(
+    "десять ",
+    "одиннадцать ",
+    "двенадцать ",
+    "тринадцать ",
+    "четырнадцать ",
+    "пятнадцать ",
+    "шестнадцать ",
+    "семнадцать ",
+    "восемнадцать ",
+    "девятнадцать "
+)
+
+val thousands =
+    arrayOf("тысяч ", "тысяча ", "тысячи ", "тысячи ", "тысячи ", "тысяч ", "тысяч ", "тысяч ", "тысяч ", "тысяч ")
+
+/*
+ * Возвращает заданное натуральное число 0...999 прописью по-русски
+ */
+fun russianHundred(n: Int, isFe: Boolean = false): String {
+    if (n == 0) {
+        return ""
+    }
+
+    val digits = arrayOf(n % 10, (n / 10) % 10, n / 100)
+
+    if (digits[1] == 1) {
+        return (hundreds[digits[2]] + firstTen[digits[0]])
+    }
+
+    if (isFe) {
+        if (digits[0] == 1) {
+            return (hundreds[digits[2]] + tens[digits[1]] + "одна ")
+        }
+        if (digits[0] == 2) {
+            return (hundreds[digits[2]] + tens[digits[1]] + "две ")
+        }
+    }
+
+    return (hundreds[digits[2]] + tens[digits[1]] + ones[digits[0]])
+}
