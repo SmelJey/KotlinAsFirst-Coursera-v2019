@@ -3,6 +3,8 @@
 package lesson7.task1
 
 import java.io.File
+import java.util.Collections.max
+import kotlin.math.max
 
 /**
  * Пример
@@ -122,7 +124,45 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    TODO()
+    val content = File(inputName).readLines().toMutableList()
+    var maxStr = 0
+
+    for (i in content.indices) {
+        content[i] = content[i].replace(Regex(" +"), " ")
+        content[i] = content[i].trim()
+        maxStr = max(maxStr, content[i].length)
+    }
+
+    for (i in content.indices) {
+        if (content[i].indexOf(' ') != -1) {
+            var spaces = maxStr - content[i].length
+            var j = 0
+            while (spaces > 0) {
+                while (content[i][j] != ' ') {
+                    j++
+                    j %= content[i].length
+                }
+
+                while (content[i][j] == ' ') {
+                    j++
+                    j %= content[i].length
+                }
+
+                content[i] = content[i].substring(0, j) + " " + content[i].substring(j, content[i].length)
+
+                spaces--
+                j++
+                j %= content[i].length
+            }
+        }
+    }
+
+    val writer = File(outputName).bufferedWriter()
+    writer.use {
+        for (line in content) {
+            writer.write(line + '\n')
+        }
+    }
 }
 
 /**
