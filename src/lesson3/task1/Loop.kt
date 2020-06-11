@@ -2,6 +2,9 @@
 
 package lesson3.task1
 
+import lesson1.task1.sqr
+import kotlin.math.floor
+import kotlin.math.log10
 import kotlin.math.sqrt
 
 /**
@@ -196,7 +199,25 @@ fun hasDifferentDigits(n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    var i = 1
+    var cnt = n
+    while (true) {
+        var sqrVal = sqr(i)
+        val sqrLen = floor(log10(sqrVal.toDouble())).toInt() + 1
+
+        if (cnt <= sqrLen) {
+            for (j in 1 until (sqrLen - cnt + 1)) {
+                sqrVal = sqrVal / 10
+            }
+
+            return sqrVal % 10
+        }
+
+        cnt -= sqrLen
+        i++
+    }
+}
 
 /**
  * Сложная
@@ -207,4 +228,27 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    val i = 1
+    var cnt = n
+
+    var prev = 0
+    var prevprev = 1
+
+    while (true) {
+        var curFib = prev + prevprev
+        prevprev = prev
+        prev = curFib
+        val fibLen = floor(log10(curFib.toDouble())).toInt() + 1
+
+        if (cnt <= fibLen) {
+            for (j in 1 until (fibLen - cnt + 1)) {
+                curFib = curFib / 10
+            }
+
+            return curFib % 10
+        }
+
+        cnt -= fibLen
+    }
+}
